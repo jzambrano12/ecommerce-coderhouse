@@ -1,27 +1,22 @@
-import { useState } from "react";
+/* eslint-disable react/prop-types */
+import { useEffect } from "react";
 import "./styles.css";
 
 function ItemListContainer({ greetings }) {
-  const [saludo, setSaludo] = useState(greetings);
+  async function getPokemon() {
+    const result = await fetch("https://pokeapi.co/api/v2/pokemon/ditto");
 
-  function changeGreeting() {
-    setSaludo("Hello people");
+    return result;
   }
 
-  return (
-    <div className="item-list-container">
-      <Content saludo={saludo} changeGreeting={changeGreeting} />
-    </div>
-  );
-}
+  useEffect(() => {
+    getPokemon()
+      .then((response) => response.json())
+      .then((data) => console.log(data))
+      .catch((error) => console.log(error));
+  }, []);
 
-function Content({ saludo, changeGreeting }) {
-  return (
-    <>
-      <p>{saludo}</p>
-      <button onClick={changeGreeting}>Press me</button>
-    </>
-  );
+  return <div className="item-list-container"></div>;
 }
 
 export default ItemListContainer;
